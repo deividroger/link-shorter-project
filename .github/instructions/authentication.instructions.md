@@ -1,3 +1,7 @@
+---
+description: Read this before implementing or modifying authentication in the project.
+---
+
 # Authentication
 
 All authentication in this app is handled exclusively by **Clerk v7**. No other auth libraries or custom auth implementations should ever be used.
