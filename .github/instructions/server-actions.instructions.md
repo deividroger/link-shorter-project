@@ -21,11 +21,11 @@ All data mutations in this app must be done via **Server Actions**. No Route Han
 
 ```ts
 // app/dashboard/actions.ts
-"use server";
+'use server';
 
-import { auth } from "@clerk/nextjs/server";
-import { z } from "zod";
-import { createLink } from "@/data/links";
+import { auth } from '@clerk/nextjs/server';
+import { z } from 'zod';
+import { createLink } from '@/data/links';
 
 const createLinkSchema = z.object({
   url: z.string().url(),
@@ -35,13 +35,13 @@ const createLinkSchema = z.object({
 type CreateLinkInput = z.infer<typeof createLinkSchema>;
 
 export async function createLinkAction(
-  input: CreateLinkInput
+  input: CreateLinkInput,
 ): Promise<{ success: true } | { error: string }> {
   const { userId } = await auth();
-  if (!userId) return { error: "Unauthorized" };
+  if (!userId) return { error: 'Unauthorized' };
 
   const parsed = createLinkSchema.safeParse(input);
-  if (!parsed.success) return { error: "Invalid input" };
+  if (!parsed.success) return { error: 'Invalid input' };
 
   await createLink({ ...parsed.data, userId });
   return { success: true };

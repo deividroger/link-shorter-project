@@ -20,9 +20,9 @@ Use Clerk middleware (`clerkMiddleware`) in `middleware.ts` to enforce route pro
 
 ```ts
 // middleware.ts
-import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
 
-const isProtectedRoute = createRouteMatcher(["/dashboard(.*)"]);
+const isProtectedRoute = createRouteMatcher(['/dashboard(.*)']);
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
@@ -31,7 +31,7 @@ export default clerkMiddleware(async (auth, req) => {
 });
 
 export const config = {
-  matcher: ["/((?!_next|.*\\..*).*)"],
+  matcher: ['/((?!_next|.*\\..*).*)'],
 };
 ```
 
@@ -40,12 +40,12 @@ export const config = {
 In `app/page.tsx`, use `auth()` to check sign-in state and redirect to `/dashboard`:
 
 ```ts
-import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { auth } from '@clerk/nextjs/server';
+import { redirect } from 'next/navigation';
 
 export default async function Home() {
   const { userId } = await auth();
-  if (userId) redirect("/dashboard");
+  if (userId) redirect('/dashboard');
   // ...render landing page
 }
 ```
@@ -66,4 +66,4 @@ Always pass `mode="modal"` to Clerk's button components:
 
 ## Disclaimers
 
- The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy

@@ -8,13 +8,20 @@ import { createLink, updateLink, deleteLink } from '@/data/links';
 
 const createLinkSchema = z.object({
   url: z.string().url('Please enter a valid URL'),
-  slug: z.string().max(20, 'Slug must be 20 characters or less').regex(/^[a-z0-9-]*$/, 'Slug may only contain lowercase letters, numbers, and hyphens').optional(),
+  slug: z
+    .string()
+    .max(20, 'Slug must be 20 characters or less')
+    .regex(
+      /^[a-z0-9-]*$/,
+      'Slug may only contain lowercase letters, numbers, and hyphens',
+    )
+    .optional(),
 });
 
 type CreateLinkInput = z.infer<typeof createLinkSchema>;
 
 export async function createLinkAction(
-  input: CreateLinkInput
+  input: CreateLinkInput,
 ): Promise<{ success: true } | { error: string }> {
   const { userId } = await auth();
   if (!userId) return { error: 'Unauthorized' };
@@ -42,7 +49,7 @@ const updateLinkSchema = z.object({
 type UpdateLinkInput = z.infer<typeof updateLinkSchema>;
 
 export async function updateLinkAction(
-  input: UpdateLinkInput
+  input: UpdateLinkInput,
 ): Promise<{ success: true } | { error: string }> {
   const { userId } = await auth();
   if (!userId) return { error: 'Unauthorized' };
@@ -67,7 +74,7 @@ const deleteLinkSchema = z.object({
 type DeleteLinkInput = z.infer<typeof deleteLinkSchema>;
 
 export async function deleteLinkAction(
-  input: DeleteLinkInput
+  input: DeleteLinkInput,
 ): Promise<{ success: true } | { error: string }> {
   const { userId } = await auth();
   if (!userId) return { error: 'Unauthorized' };

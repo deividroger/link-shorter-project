@@ -48,8 +48,8 @@ export function DeleteLinkDialog({ link }: DeleteLinkDialogProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete short link</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete <strong>/{link.slug}</strong>? This action cannot be
-              undone.
+              Are you sure you want to delete <strong>/{link.slug}</strong>?
+              This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

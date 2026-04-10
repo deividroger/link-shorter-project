@@ -71,7 +71,9 @@ export function CreateLinkDialog() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="slug">Slug <span className="text-muted-foreground">(optional)</span></Label>
+            <Label htmlFor="slug">
+              Slug <span className="text-muted-foreground">(optional)</span>
+            </Label>
             <Input
               id="slug"
               type="text"
@@ -84,11 +86,14 @@ export function CreateLinkDialog() {
               Lowercase letters, numbers, and hyphens only. Max 20 characters.
             </p>
           </div>
-          {error && (
-            <p className="text-sm text-destructive">{error}</p>
-          )}
+          {error && <p className="text-sm text-destructive">{error}</p>}
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => handleOpenChange(false)} disabled={isPending}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleOpenChange(false)}
+              disabled={isPending}
+            >
               Cancel
             </Button>
             <Button type="submit" disabled={isPending}>
