@@ -55,7 +55,7 @@ export default async function Home() {
           every click — all in one simple dashboard.
         </p>
         <div className="flex flex-wrap justify-center gap-3">
-          <SignUpButton mode="modal">
+          <SignUpButton mode="modal" forceRedirectUrl="/dashboard">
             <Button size="lg">Get Started Free</Button>
           </SignUpButton>
         </div>

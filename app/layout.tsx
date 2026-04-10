@@ -35,10 +35,10 @@ export default function RootLayout({
         <ClerkProvider appearance={{ theme: shadcn }}>
           <header className="flex items-center justify-end gap-2 border-b px-6 py-3">
             <Show when="signed-out">
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" forceRedirectUrl="/dashboard">
                 <Button variant="outline" size="sm">Sign in</Button>
               </SignInButton>
-              <SignUpButton mode="modal">
+              <SignUpButton mode="modal" forceRedirectUrl="/dashboard">
                 <Button size="sm">Sign up</Button>
               </SignUpButton>
             </Show>

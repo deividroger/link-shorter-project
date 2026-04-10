@@ -25,6 +25,7 @@ All coding standards, conventions, and patterns for this project are documented 
 1. **Read the docs first — always.** Reading the relevant `/docs` file(s) is your FIRST action, before any code generation, file editing, or planning. No exceptions.
 2. **App Router only.** Never use Pages Router patterns.
 3. **TypeScript only.** All files must be `.ts` or `.tsx`.
+4. **Never use `middleware.ts`.** The Next.js middleware convention (`middleware.ts`) is deprecated in the version of Next.js used by this project. All request interception, auth guards, and route matching logic must go in `proxy.ts` instead.
 4. **Authenticate every mutation.** Every Server Action and Route Handler that reads or writes user data must verify `userId` via `await auth()`.
 5. **Never expose secrets.** `CLERK_SECRET_KEY`, `DATABASE_URL`, and any other server-only secrets must never reach client-side code.
 6. **Use the `cn()` helper** for all conditional class name merging — never string concatenation.
