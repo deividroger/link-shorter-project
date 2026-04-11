@@ -26,14 +26,20 @@ export async function updateLink(
   userId: string,
   data: Pick<NewLink, 'url'>,
 ): Promise<void> {
-  await db
+  const rows = await db
     .update(links)
     .set({ ...data, updatedAt: new Date() })
-    .where(and(eq(links.id, id), eq(links.userId, userId)));
+    .where(and(eq(links.id, id), eq(links.userId, userId)))
+    .returning({ id: links.id });
+  if (rows.length === 0) throw new Error('Link not found or access denied');
 }
 
 export async function deleteLink(id: number, userId: string): Promise<void> {
-  await db.delete(links).where(and(eq(links.id, id), eq(links.userId, userId)));
+  const rows = await db
+    .delete(links)
+    .where(and(eq(links.id, id), eq(links.userId, userId)))
+    .returning({ id: links.id });
+  if (rows.length === 0) throw new Error('Link not found or access denied');
 }
 
 export async function getLinkBySlug(slug: string): Promise<Link | undefined> {

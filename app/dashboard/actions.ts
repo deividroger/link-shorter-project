@@ -7,7 +7,20 @@ import { nanoid } from 'nanoid';
 import { createLink, updateLink, deleteLink } from '@/data/links';
 
 const createLinkSchema = z.object({
-  url: z.string().url('Please enter a valid URL'),
+  url: z
+    .string()
+    .url('Please enter a valid URL')
+    .refine(
+      (val) => {
+        try {
+          const { protocol } = new URL(val);
+          return protocol === 'http:' || protocol === 'https:';
+        } catch {
+          return false;
+        }
+      },
+      { message: 'URL must use http or https protocol' },
+    ),
   slug: z
     .string()
     .max(20, 'Slug must be 20 characters or less')
@@ -29,12 +42,32 @@ export async function createLinkAction(
   const parsed = createLinkSchema.safeParse(input);
   if (!parsed.success) return { error: parsed.error.issues[0].message };
 
-  const slug = parsed.data.slug || nanoid(8);
+  const userProvidedSlug = parsed.data.slug;
 
-  try {
-    await createLink({ url: parsed.data.url, slug, userId });
-  } catch {
-    return { error: 'Slug already taken. Please choose a different one.' };
+  if (userProvidedSlug) {
+    try {
+      await createLink({ url: parsed.data.url, slug: userProvidedSlug, userId });
+    } catch {
+      return { error: 'Slug already taken. Please choose a different one.' };
+    }
+  } else {
+    const MAX_RETRIES = 5;
+    let inserted = false;
+    for (let attempt = 0; attempt < MAX_RETRIES; attempt++) {
+      const slug = nanoid(8);
+      try {
+        await createLink({ url: parsed.data.url, slug, userId });
+        inserted = true;
+        break;
+      } catch {
+        if (attempt === MAX_RETRIES - 1) {
+          return { error: 'Failed to generate a unique slug. Please try again.' };
+        }
+      }
+    }
+    if (!inserted) {
+      return { error: 'Failed to generate a unique slug. Please try again.' };
+    }
   }
 
   revalidatePath('/dashboard');
@@ -43,7 +76,20 @@ export async function createLinkAction(
 
 const updateLinkSchema = z.object({
   id: z.number().int().positive(),
-  url: z.string().url('Please enter a valid URL'),
+  url: z
+    .string()
+    .url('Please enter a valid URL')
+    .refine(
+      (val) => {
+        try {
+          const { protocol } = new URL(val);
+          return protocol === 'http:' || protocol === 'https:';
+        } catch {
+          return false;
+        }
+      },
+      { message: 'URL must use http or https protocol' },
+    ),
 });
 
 type UpdateLinkInput = z.infer<typeof updateLinkSchema>;
@@ -82,7 +128,11 @@ export async function deleteLinkAction(
   const parsed = deleteLinkSchema.safeParse(input);
   if (!parsed.success) return { error: parsed.error.issues[0].message };
 
-  await deleteLink(parsed.data.id, userId);
+  try {
+    await deleteLink(parsed.data.id, userId);
+  } catch {
+    return { error: 'Failed to delete link.' };
+  }
 
   revalidatePath('/dashboard');
   return { success: true };
